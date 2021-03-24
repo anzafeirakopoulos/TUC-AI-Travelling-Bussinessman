@@ -1,0 +1,15 @@
+<Source>Node1</Source>
+<Destination>Node9</Destination>
+<Roads>
+Road1; Node1; Node2; 44
+Road2; Node1; Node3; 20
+Road6; Node1; Node2; 15
+Road5; Node1; Node4; 9
+Road3; Node2; Node5; 47
+Road7; Node2; Node6; 666
+Road8; Node2; Node6; 50
+Road4; Node2; Node7; 19
+Road9; Node3; Node8; 0
+Road10; Node4; Node9; 47
+Road11; Node4; Node10; 63
+</Roads>
