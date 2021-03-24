@@ -66,51 +66,12 @@ def calculate_real_cost(actual_traffic, road_path, predicted_cost_per_road):
 
 def reevaluate_propabilities(graph, road_number, actual_traffic, predicted_traffic):
 
-    low_hits = 0
-    normal_hits = 0
-    heavy_hits = 0
-    low_counter = 0
-    normal_counter = 0
-    heavy_counter = 0
-
-    for road in actual_traffic:
-
-        if predicted_traffic[road] == actual_traffic[road]:
-
-            if predicted_traffic[road] == 'low':
-                low_hits += 1
-                low_counter += 1
-            
-            elif predicted_traffic[road] == 'normal':
-                normal_hits += 1
-                normal_counter += 1
-
-            else:
-                heavy_hits += 1
-                heavy_counter += 1
-
-        else:
-
-            if actual_traffic[road] == 'low':
-                low_counter += 1
-            
-            elif actual_traffic[road] == 'normal':
-                normal_counter += 1
-
-            else:
-                heavy_counter += 1
+    
 
 
        
 
-    percentage_low = low_hits / low_counter
-    percentage_normal = normal_hits / normal_counter
-    percentage_heavy = heavy_hits / heavy_counter
-
-    print(percentage_low)
-    print(percentage_normal)
-    print(percentage_heavy)
-
+   
     
 
 
