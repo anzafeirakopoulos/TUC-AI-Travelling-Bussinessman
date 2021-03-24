@@ -1,4 +1,5 @@
 import main
+import random
 import bisect
 from operator import itemgetter
 
@@ -34,6 +35,35 @@ class Graph:
 
     def set_p3(self, x): 
         self.p3 = x 
+
+    
+    def select_propability_coefficient(self):
+       
+        temp_p1 = self.get_p1() * 100
+        temp_p2 = self.get_p2() * 100
+        temp_p3 = self.get_p3() * 100
+
+        if (temp_p1 + temp_p2 + temp_p3) != 100:
+            print("you stupid")
+            assert(0)
+        
+        r_number = random.randint(1, 100)
+
+        if (r_number >= 1) and (r_number < temp_p1):
+
+            traffic = "low"
+        
+        elif (r_number >= temp_p1)  and (r_number < temp_p2 + temp_p1):
+
+            traffic = "normal"
+
+        elif (r_number >= temp_p2 + temp_p1) and (r_number <= 100):
+        
+            traffic = "high"
+
+
+        return traffic
+        
 
     def read_graph(self, file):
 
@@ -231,19 +261,19 @@ class Graph:
 
         for road, cost in self.graph_dict[node][child].items():
 
-            traffic_status = predicted_traffic[road]
+            #traffic_status = predicted_traffic[road]
 
-            if(traffic_status == "low"):
+            if(self.select_propability_coefficient() == "low"):
 
-                temp_cost = int(cost)*0.9 
+                temp_cost = int(cost)*0.9
 
-            elif(traffic_status == "normal"):
+            elif(self.select_propability_coefficient() == "normal"):
 
                 temp_cost = int(cost) 
 
             else:
 
-                temp_cost = int(cost)*1.25
+                temp_cost = int(cost)*1.25 
 
             if temp_cost < min_cost:
 
