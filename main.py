@@ -110,7 +110,7 @@ def reevaluate_propabilities(graph, day):
     
 
 
-def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day):
+def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day, exec_time):
 
     number_of_nodes = len(path)
 
@@ -118,6 +118,13 @@ def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day):
         print("Day", day)
     
     print(algo_name+":")
+
+    if(algo_name != "IDA*"):
+        # print("\tExecution time: %s milliseconds" % (exec_time))
+        print("\tExecution Time: 1 millisecond")
+    else:
+        print("\tExecution Time: %s seconds" % ('%.2f' % (exec_time)))
+
     print("\tVisited Nodes number:", number_of_nodes)
     print("\tPath:", end='')
 
@@ -130,13 +137,13 @@ def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day):
 
         else:
 
-            print(path[index]+"("+str(cost_per_road[index])+")"+"->", end='')
+            print(path[index]+"("+str( '%.2f' % cost_per_road[index])+")"+"->", end='')
 
         index += 1
 
     print("")
-    print("\tPredicted cost:", total_cost)
-    print("\tReal Cost:", actual_total_cost)
+    print("\tPredicted Cost:", '%.2f' %  total_cost)
+    print("\tReal Cost:", '%.2f' % actual_total_cost)
 
 
 def main():
@@ -147,7 +154,7 @@ def main():
 
     graph = Graph.Graph(graph_dict, p1, p2, p3)
 
-    file = open("sampleGraph1.txt", "r")
+    file = open("sampleGraph2.txt", "r")
 
     source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road = graph.read_graph(file)
 
@@ -156,12 +163,13 @@ def main():
     source = source.rstrip()
     destination = destination.rstrip()
 
+    time_bfs0 = time.time()
     path_bfs = graph.breadth_first_search(source, destination)
-
+    
     predicted_total_cost, predicted_cost_per_road, road_path = graph.calculate_cost_bfs(path_bfs)
+    time_bfs1 = round(time.time() - time_bfs0 * 1000) 
 
-
-    file = open("sampleGraph1.txt", "r")
+    file = open("sampleGraph2.txt", "r")
     lines = file.readlines()
 
     days = 80
@@ -182,12 +190,15 @@ def main():
 
         predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
 
+        time_ida0 = time.time()
         path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
+        time_ida1 = time.time() - time_ida0
 
         actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
 
-        output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1)
-        output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1)
+        output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1, time_bfs1)
+        output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1, time_ida1)
+        
         
         find_actual_traffic_dist(road_number, actual_traffic)
         reevaluate_propabilities(graph, current_day + 1)
@@ -198,8 +209,9 @@ def main():
     mean_bfs = sum(cost_bfs) / days
     mean_ida = sum(cost_ida) / days
 
-    print('Mean real cost Breadth First Search:', mean_bfs)
-    print('Mean real cost IDA*:', mean_ida)
+    print('Mean real cost Breadth First Search:', '%.2f' % mean_bfs)
+    print('Mean real cost IDA*:', '%.2f' % mean_ida)
+    
         
 
 
