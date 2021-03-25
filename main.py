@@ -7,8 +7,6 @@ import time
 
 graph_dict = {}
 
-
-
 def remove_tags(text):
 
     import re
@@ -66,7 +64,71 @@ def calculate_real_cost(actual_traffic, road_path, predicted_cost_per_road):
 
 def reevaluate_propabilities(graph, road_number, actual_traffic, predicted_traffic):
 
-    
+    p_low = graph.get_p1()
+    p_normal = graph.get_p2()
+    p_heavy = graph.get_p3()
+    p_increment = 1 / road_number
+    p_increment = round(p_increment, 3)
+
+    for road in actual_traffic:
+
+        # hit
+        if predicted_traffic[road] == actual_traffic[road]:
+
+            if predicted_traffic[road] == 'low':
+                p_low += p_increment
+
+                if(p_normal <= p_increment / 2):
+                    p_heavy -= p_increment
+                
+                elif(p_heavy <= p_increment / 2):
+                    p_heavy -= p_increment
+                else:
+                    p_normal -= p_increment / 2
+                    p_heavy -= p_increment / 2
+            
+            elif predicted_traffic[road] == 'normal':
+                p_normal += p_increment
+                p_low -= p_increment / 2
+                p_heavy -= p_increment / 2
+
+            else:
+                p_heavy += p_increment
+                p_low -= p_increment / 2
+                p_normal -= p_increment / 2
+        else:
+
+            if actual_traffic[road] == 'low':
+                p_low += p_increment
+
+                if predicted_traffic[road] == 'normal':
+                    p_normal -= p_increment
+                else:
+                    p_heavy -= p_increment
+       
+            elif actual_traffic[road] == 'normal':
+                p_normal += p_increment
+
+                if predicted_traffic[road] == 'low':
+                    p_low -= p_increment
+                else:
+                    p_heavy -= p_increment
+
+            else:
+                p_heavy += p_increment
+
+                if predicted_traffic[road] == 'normal':
+                    p_normal -= p_increment
+                else:
+                    p_low -= p_increment    
+            
+    graph.set_p1(p_low)
+    graph.set_p2(p_normal)
+    graph.set_p3(p_heavy)  
+
+    print(p_low)
+    print(p_normal)
+    print(p_heavy)
 
 
        
@@ -134,8 +196,9 @@ def main():
     a_traffic_line = actual_traffic_line + 1
     p_traffic_line = predictions_line + 1
 
+
     
-    for current_day in range(1):
+    for current_day in range(20):
 
         actual_traffic, a_traffic_line = read_traffic(a_traffic_line, road_number, lines)
 
@@ -143,14 +206,16 @@ def main():
 
         predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
 
-        #path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
+        path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
 
-        #actual_real_cost_ida = calculate_real_cost(path_of_roads, cost_of_path)
+        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
 
-        #output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1)
-        #output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1)
+        output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1)
+        output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1)
         
-        reevaluate_propabilities(graph, road_number, actual_traffic, predicted_traffic)
+        reevaluate_propabilities(graph,road_number, actual_traffic, predicted_traffic)
+
+        
 
 
 if __name__ == "__main__":
