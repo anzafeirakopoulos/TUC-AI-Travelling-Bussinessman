@@ -43,9 +43,9 @@ class Graph:
         temp_p2 = self.get_p2() * 100
         temp_p3 = self.get_p3() * 100
 
-        if abs((temp_p1 + temp_p2 + temp_p3) - 100) > 0.01:
-            print("you stupid")
-            assert(0)
+        # if (temp_p1 + temp_p2 + temp_p3) != 100:
+        #     print("you stupid")
+        #     assert(0)
         
         r_number = random.randint(1, 100)
 
