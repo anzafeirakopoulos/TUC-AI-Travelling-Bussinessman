@@ -139,14 +139,19 @@ class Graph:
 
     def my_heur(self, heur_dict, source, fringe):
 
+        visited = []
+
         for node in fringe:
             
+            visited.append(node)
             cost = heur_dict[node]
 
             for child in self.graph_dict[node]:
                 
-                if child is not source:  
-                    fringe.append(child)
+                if child is not source:
+
+                    if child not in visited:  
+                        fringe.append(child)
 
                     
                     min_rcost = min(self.graph_dict[node][child].items(), key=itemgetter(1))
@@ -161,7 +166,7 @@ class Graph:
                         heur_dict[child] = int(connecting_path[1]) + cost
 
         print(heur_dict)
-        print(fringe)
+        # print(fringe)
 
     def calculate_cost_bfs(self, path):
 
