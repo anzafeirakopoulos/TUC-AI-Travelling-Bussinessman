@@ -112,6 +112,57 @@ class Graph:
         return source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road
 
 
+    def myheuristic(self, source, destination):
+
+        heur_dict = {}
+        fringe = []
+        visited = []
+
+        # expand the destination node
+        for child in self.graph_dict[source]:
+
+            fringe.append(child)
+            visited.append(child)
+            
+            # find the mean road if more than 1
+            min_rcost = min(self.graph_dict[source][child].items(), key=itemgetter(1))
+            # road_path.append(temp[0])
+
+            if child not in heur_dict:
+
+                heur_dict[child] = int(min_rcost[1])
+
+        print(heur_dict)
+        print(fringe)
+        #print(visited)
+        self.my_heur(heur_dict, source, fringe)
+
+    def my_heur(self, heur_dict, source, fringe):
+
+        for node in fringe:
+            
+            cost = heur_dict[node]
+
+            for child in self.graph_dict[node]:
+                
+                if child is not source:  
+                    fringe.append(child)
+
+                    
+                    min_rcost = min(self.graph_dict[node][child].items(), key=itemgetter(1))
+                    connecting_path = min(self.graph_dict[node][child].items(), key=itemgetter(1))
+
+                    if child not in heur_dict:
+
+                        heur_dict[child] = int(min_rcost[1]) + cost
+
+                    elif( heur_dict[child] > int(connecting_path[1]) + cost):
+                        
+                        heur_dict[child] = int(connecting_path[1]) + cost
+
+        print(heur_dict)
+        print(fringe)
+
     def calculate_cost_bfs(self, path):
 
         cost_per_road = []
