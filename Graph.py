@@ -9,11 +9,12 @@ average_cost_per_road = 0
 
 class Graph:
 
-    def __init__(self, graph_dict, p1, p2, p3):
+    def __init__(self, graph_dict, p1, p2, p3, h_dict):
         self.graph_dict = graph_dict
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
+        self.h_dict = h_dict
 
 
     # getter method 
@@ -35,6 +36,9 @@ class Graph:
 
     def set_p3(self, x): 
         self.p3 = x 
+
+    def set_h_dict(self, hdict):
+        self.h_dict = hdict
 
     
     def select_propability_coefficient(self):
@@ -165,8 +169,9 @@ class Graph:
                         
                         heur_dict[child] = int(connecting_path[1]) + cost
 
-        print(heur_dict)
+        #print(heur_dict)
         # print(fringe)
+        self.set_h_dict(heur_dict)
 
     def calculate_cost_bfs(self, path):
 
@@ -249,8 +254,7 @@ class Graph:
 
 
     def heuristic(self, node):
-
-        return 38
+        return self.h_dict[node]
 
 
     def ida_star(self, predicted_traffic, source, destination):

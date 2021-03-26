@@ -6,6 +6,7 @@ import time
 
 
 graph_dict = {}
+h_dict = {}
 percentage_low = []
 percentage_normal = []
 percentage_heavy = []
@@ -152,9 +153,9 @@ def main():
     p2 = 0.2
     p3 = 0.6
 
-    graph = Graph.Graph(graph_dict, p1, p2, p3)
+    graph = Graph.Graph(graph_dict, p1, p2, p3, h_dict)
 
-    file = open("test_graph.txt", "r")
+    file = open("sampleGraph3.txt", "r")
 
     source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road = graph.read_graph(file)
 
@@ -164,54 +165,55 @@ def main():
     destination = destination.rstrip()
 
     graph.myheuristic(destination, source)
-    # time_bfs0 = time.time()
-    # path_bfs = graph.breadth_first_search(source, destination)
+
+    time_bfs0 = time.time()
+    path_bfs = graph.breadth_first_search(source, destination)
     
-    # predicted_total_cost, predicted_cost_per_road, road_path = graph.calculate_cost_bfs(path_bfs)
-    # time_bfs1 = round(time.time() - time_bfs0 * 1000) 
+    predicted_total_cost, predicted_cost_per_road, road_path = graph.calculate_cost_bfs(path_bfs)
+    time_bfs1 = round(time.time() - time_bfs0 * 1000) 
 
-    # file = open("sampleGraph2.txt", "r")
-    # lines = file.readlines()
+    file = open("sampleGraph3.txt", "r")
+    lines = file.readlines()
 
-    # days = 80
-    # road_number = roads_count
-    # a_traffic_line = actual_traffic_line + 1
-    # p_traffic_line = predictions_line + 1
+    days = 80
+    road_number = roads_count
+    a_traffic_line = actual_traffic_line + 1
+    p_traffic_line = predictions_line + 1
 
-    # cost_bfs = []
-    # cost_ida = []
+    cost_bfs = []
+    cost_ida = []
 
 
     
-    # for current_day in range(days):
+    for current_day in range(days):
 
-    #     actual_traffic, a_traffic_line = read_traffic(a_traffic_line, road_number, lines)
+        actual_traffic, a_traffic_line = read_traffic(a_traffic_line, road_number, lines)
 
-    #     actual_real_cost_bfs = calculate_real_cost(actual_traffic, road_path, predicted_cost_per_road)
+        actual_real_cost_bfs = calculate_real_cost(actual_traffic, road_path, predicted_cost_per_road)
 
-    #     predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
+        predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
 
-    #     time_ida0 = time.time()
-    #     path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
-    #     time_ida1 = time.time() - time_ida0
+        time_ida0 = time.time()
+        path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
+        time_ida1 = time.time() - time_ida0
 
-    #     actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
+        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
 
-    #     output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1, time_bfs1)
-    #     output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1, time_ida1)
+        output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1, time_bfs1)
+        output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1, time_ida1)
         
         
-    #     find_actual_traffic_dist(road_number, actual_traffic)
-    #     reevaluate_propabilities(graph, current_day + 1)
+        find_actual_traffic_dist(road_number, actual_traffic)
+        reevaluate_propabilities(graph, current_day + 1)
 
-    #     cost_bfs.append(actual_real_cost_bfs)
-    #     cost_ida.append(actual_real_cost_ida)
+        cost_bfs.append(actual_real_cost_bfs)
+        cost_ida.append(actual_real_cost_ida)
 
-    # mean_bfs = sum(cost_bfs) / days
-    # mean_ida = sum(cost_ida) / days
+    mean_bfs = sum(cost_bfs) / days
+    mean_ida = sum(cost_ida) / days
 
-    # print('Mean real cost Breadth First Search:', '%.2f' % mean_bfs)
-    # print('Mean real cost IDA*:', '%.2f' % mean_ida)
+    print('Mean real cost Breadth First Search:', '%.2f' % mean_bfs)
+    print('Mean real cost IDA*:', '%.2f' % mean_ida)
     
         
 
