@@ -155,7 +155,57 @@ def main():
 
     graph = Graph.Graph(graph_dict, p1, p2, p3, h_dict)
 
-    file = open("sampleGraph3.txt", "r")
+    choice = '0'
+    while choice =='0':
+
+        print("Choose what to do")
+        print("  1) Run with sampleGraph1")
+        print("  2) Run with sampleGraph2")
+        print("  3) Run with sampleGraph3")
+        print("  4) Run with custom file name")
+        print("  5) Exit")
+
+        choice = input ("Please enter your choice:")
+
+        if choice == "1":
+
+            print("Executing for sampleGraph1...")
+            choice = 'sampleGraph1.txt'
+            
+        elif choice == "2":
+
+            print("Executing for sampleGraph2...")
+            choice = 'sampleGraph2.txt'
+
+        elif choice == "3":
+
+            print("Executing for sampleGraph3...")
+            choice = 'sampleGraph3.txt'
+
+        elif choice == "4":
+
+            flag = False
+            while flag == False:
+
+                fr = input("\nPlease enter the name of the file you wish to read:")
+                
+                if fr.endswith('.txt'):
+                    choice = fr
+                    flag = True
+                else:
+                    print('Enter a file with the suffix .txt')
+
+        elif choice == "5":
+
+            print("YEET!")
+            quit()
+
+        else:
+
+            print("Enter a valid command (1 through 5)")
+            choice = '0'
+
+    file = open(choice, "r")
 
     source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road = graph.read_graph(file)
 
@@ -172,7 +222,7 @@ def main():
     predicted_total_cost, predicted_cost_per_road, road_path = graph.calculate_cost_bfs(path_bfs)
     time_bfs1 = round(time.time() - time_bfs0 * 1000) 
 
-    file = open("sampleGraph3.txt", "r")
+    file = open(choice, "r")
     lines = file.readlines()
 
     days = 80
@@ -185,7 +235,7 @@ def main():
 
 
     
-    for current_day in range(days):
+    for current_day in range(20):
 
         actual_traffic, a_traffic_line = read_traffic(a_traffic_line, road_number, lines)
 

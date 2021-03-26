@@ -136,8 +136,8 @@ class Graph:
 
                 heur_dict[child] = int(min_rcost[1])
 
-        print(heur_dict)
-        print(fringe)
+        # print(heur_dict)
+        # print(fringe)
         #print(visited)
         self.my_heur(heur_dict, source, fringe)
 
