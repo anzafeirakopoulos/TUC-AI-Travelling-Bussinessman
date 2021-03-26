@@ -1,15 +1,24 @@
-<Source>Node1</Source>
-<Destination>Node9</Destination>
+<Source>A</Source>
+<Destination>L</Destination>
 <Roads>
-Road1; Node1; Node2; 44
-Road2; Node1; Node3; 20
-Road6; Node1; Node2; 15
-Road5; Node1; Node4; 9
-Road3; Node2; Node5; 47
-Road7; Node2; Node6; 666
-Road8; Node2; Node6; 50
-Road4; Node2; Node7; 19
-Road9; Node3; Node8; 0
-Road10; Node4; Node9; 47
-Road11; Node4; Node10; 63
+Road1; A; B; 6
+Road2; A; C; 3
+Road3; A; D; 5
+Road4; B; E; 3
+Road5; B; F; 2
+Road6; C; G; 1
+Road7; D; H; 1
+Road8; F; I; 4
+Road9; F; J; 11
+Road10; F; G; 1
+Road11; G; K; 20
+Road12; H; K; 10
+Road13; I; L; 7
+Road14; J; L; 6
+Road15; K; L; 8
+Road16; I; L; 9
+Road17; G; H; 9
+Road18; C; H; 3
+Road19; C; D; 5
+Road20; B; F; 1
 </Roads>

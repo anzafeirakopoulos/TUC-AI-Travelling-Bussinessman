@@ -6,6 +6,7 @@ import time
 
 
 graph_dict = {}
+h_dict = {}
 percentage_low = []
 percentage_normal = []
 percentage_heavy = []
@@ -152,16 +153,68 @@ def main():
     p2 = 0.2
     p3 = 0.6
 
-    graph = Graph.Graph(graph_dict, p1, p2, p3)
+    graph = Graph.Graph(graph_dict, p1, p2, p3, h_dict)
 
-    file = open("sampleGraph2.txt", "r")
+    choice = '0'
+    while choice =='0':
 
-    source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road = graph.read_graph(file)
+        print("Choose what to do")
+        print("  1) Run with sampleGraph1")
+        print("  2) Run with sampleGraph2")
+        print("  3) Run with sampleGraph3")
+        print("  4) Run with custom file name")
+        print("  5) Exit")
+
+        choice = input ("Please enter your choice:")
+
+        if choice == "1":
+
+            print("Executing for sampleGraph1...")
+            choice = 'sampleGraph1.txt'
+            
+        elif choice == "2":
+
+            print("Executing for sampleGraph2...")
+            choice = 'sampleGraph2.txt'
+
+        elif choice == "3":
+
+            print("Executing for sampleGraph3...")
+            choice = 'sampleGraph3.txt'
+
+        elif choice == "4":
+
+            flag = False
+            while flag == False:
+
+                fr = input("\nPlease enter the name of the file you wish to read:")
+                
+                if fr.endswith('.txt'):
+                    choice = fr
+                    flag = True
+                else:
+                    print('Enter a file with the suffix .txt')
+
+        elif choice == "5":
+
+            print("YEET!")
+            quit()
+
+        else:
+
+            print("Enter a valid command (1 through 5)")
+            choice = '0'
+
+    file = open(choice, "r")
+
+    source, destination, actual_traffic_line, predictions_line, roads_count = graph.read_graph(file)
 
     file.close()
 
     source = source.rstrip()
     destination = destination.rstrip()
+
+    graph.myheuristic(destination, source)
 
     time_bfs0 = time.time()
     path_bfs = graph.breadth_first_search(source, destination)
@@ -169,7 +222,7 @@ def main():
     predicted_total_cost, predicted_cost_per_road, road_path = graph.calculate_cost_bfs(path_bfs)
     time_bfs1 = round(time.time() - time_bfs0 * 1000) 
 
-    file = open("sampleGraph2.txt", "r")
+    file = open(choice, "r")
     lines = file.readlines()
 
     days = 80
@@ -191,10 +244,11 @@ def main():
         predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
 
         time_ida0 = time.time()
-        path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
+        path_ida, path_of_roads, cost_of_path = graph.ida_star(predicted_traffic, source, destination)
         time_ida1 = time.time() - time_ida0
 
-        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
+        base_cost_ida = graph.calculate_base_cost_ida(path_ida, path_of_roads)
+        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, base_cost_ida)
 
         output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1, time_bfs1)
         output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1, time_ida1)
