@@ -1,4 +1,5 @@
 import main
+import pprint
 import random
 import bisect
 from operator import itemgetter
@@ -45,7 +46,7 @@ class Graph:
        
         temp_p1 = self.get_p1() * 100
         temp_p2 = self.get_p2() * 100
-        temp_p3 = self.get_p3() * 100
+        #temp_p3 = self.get_p3() * 100
 
         # if (temp_p1 + temp_p2 + temp_p3) != 100:
         #     print("you stupid")
@@ -63,7 +64,7 @@ class Graph:
 
         elif (r_number >= temp_p2 + temp_p1) and (r_number <= 100):
         
-            traffic = "high"
+            traffic = "heavy"
 
 
         return traffic
@@ -113,7 +114,7 @@ class Graph:
 
         average_cost_per_road = average_cost_per_road / roads_count
 
-        return source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road
+        return source, destination, actual_traffic_line, predictions_line, roads_count
 
 
     def myheuristic(self, source, destination):
@@ -140,6 +141,7 @@ class Graph:
         # print(fringe)
         #print(visited)
         self.my_heur(heur_dict, source, fringe)
+
 
     def my_heur(self, heur_dict, source, fringe):
 
@@ -169,9 +171,10 @@ class Graph:
                         
                         heur_dict[child] = int(connecting_path[1]) + cost
 
-        #print(heur_dict)
+        #pprint.pprint(heur_dict)
         # print(fringe)
         self.set_h_dict(heur_dict)
+
 
     def calculate_cost_bfs(self, path):
 
@@ -206,6 +209,18 @@ class Graph:
         total_cost = sum(cost_per_road)
 
         return total_cost, cost_per_road, road_path
+
+    def calculate_base_cost_ida(self, path, roads):
+
+        total_cost = []
+        
+        for index in range(len(path) - 1):
+
+            total_cost.append(self.graph_dict[path[index]][path[index+1]][roads[index]])
+            total_cost[index] = int(total_cost[index])
+        
+        return total_cost
+
 
 
     def populate_graph(self, road, node1, node2, cost):
@@ -268,7 +283,7 @@ class Graph:
 
             t = self.search(predicted_traffic, source, destination, path_of_roads, cost_of_path, path, 0, limit)
             if t == -1:
-                return path, path_of_roads, cost_of_path, limit
+                return path, path_of_roads, cost_of_path
             
 
             limit = t
@@ -288,12 +303,12 @@ class Graph:
 
         min = float("inf")
         successors, succ_roads, succ_road_cost = self.sorted_successors(predicted_traffic, node)
-        counter = 0;
+        counter = 0
         for child in successors:
 
             if child not in path:
 
-                step_cost = succ_road_cost[counter] - self.heuristic(node)
+                step_cost = succ_road_cost[counter] - self.heuristic(child)
 
                 path.append(child)
                 path_of_roads.append(succ_roads[counter])
@@ -310,7 +325,7 @@ class Graph:
                 path_of_roads.pop()
                 cost_of_path.pop()
 
-                counter += 1
+            counter += 1
 
         return min
 
@@ -322,12 +337,13 @@ class Graph:
         for road, cost in self.graph_dict[node][child].items():
 
             #traffic_status = predicted_traffic[road]
+            traffic = self.select_propability_coefficient()
 
-            if(self.select_propability_coefficient() == "low"):
+            if(traffic == "low"):
 
                 temp_cost = int(cost)*0.9
 
-            elif(self.select_propability_coefficient() == "normal"):
+            elif(traffic == "normal"):
 
                 temp_cost = int(cost) 
 

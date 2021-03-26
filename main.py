@@ -207,7 +207,7 @@ def main():
 
     file = open(choice, "r")
 
-    source, destination, actual_traffic_line, predictions_line, roads_count, average_cost_per_road = graph.read_graph(file)
+    source, destination, actual_traffic_line, predictions_line, roads_count = graph.read_graph(file)
 
     file.close()
 
@@ -235,7 +235,7 @@ def main():
 
 
     
-    for current_day in range(20):
+    for current_day in range(days):
 
         actual_traffic, a_traffic_line = read_traffic(a_traffic_line, road_number, lines)
 
@@ -244,10 +244,11 @@ def main():
         predicted_traffic, p_traffic_line = read_traffic(p_traffic_line, road_number, lines)
 
         time_ida0 = time.time()
-        path_ida, path_of_roads, cost_of_path, limit = graph.ida_star(predicted_traffic, source, destination)
+        path_ida, path_of_roads, cost_of_path = graph.ida_star(predicted_traffic, source, destination)
         time_ida1 = time.time() - time_ida0
 
-        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, cost_of_path)
+        base_cost_ida = graph.calculate_base_cost_ida(path_ida, path_of_roads)
+        actual_real_cost_ida = calculate_real_cost(actual_traffic, path_of_roads, base_cost_ida)
 
         output(path_bfs, predicted_total_cost, predicted_cost_per_road, actual_real_cost_bfs, "Breadth First Search", current_day + 1, time_bfs1)
         output(path_ida, sum(cost_of_path), cost_of_path, actual_real_cost_ida, "IDA*", current_day + 1, time_ida1)
