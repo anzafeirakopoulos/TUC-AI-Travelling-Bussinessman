@@ -4,7 +4,6 @@ import random
 import bisect
 from operator import itemgetter
 
-
 average_cost_per_road = 0
 
 
@@ -210,6 +209,7 @@ class Graph:
 
         return total_cost, cost_per_road, road_path
 
+
     def calculate_base_cost_ida(self, path, roads):
 
         total_cost = []
@@ -220,7 +220,6 @@ class Graph:
             total_cost[index] = int(total_cost[index])
         
         return total_cost
-
 
 
     def populate_graph(self, road, node1, node2, cost):

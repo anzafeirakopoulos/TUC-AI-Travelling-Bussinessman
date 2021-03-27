@@ -101,14 +101,7 @@ def reevaluate_propabilities(graph, day):
 
     graph.set_p1(dist_low)
     graph.set_p2(dist_normal)
-    graph.set_p3(dist_heavy)
-
-    # print('Day:', day)
-    # print(dist_low)
-    # print(dist_normal)
-    # print(dist_heavy)
-    # print('--------------------------')
-    
+    graph.set_p3(dist_heavy)    
 
 
 def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day, exec_time):
@@ -121,8 +114,8 @@ def output(path, total_cost, cost_per_road, actual_total_cost, algo_name, day, e
     print(algo_name+":")
 
     if(algo_name != "IDA*"):
-        # print("\tExecution time: %s milliseconds" % (exec_time))
-        print("\tExecution Time: 1 millisecond")
+        #print("\tExecution time: %s milliseconds" % (exec_time))
+        print("\tExecution Time: ~1 millisecond")
     else:
         print("\tExecution Time: %s seconds" % ('%.2f' % (exec_time)))
 
@@ -233,7 +226,6 @@ def main():
     cost_bfs = []
     cost_ida = []
 
-
     
     for current_day in range(days):
 
@@ -263,13 +255,12 @@ def main():
     mean_bfs = sum(cost_bfs) / days
     mean_ida = sum(cost_ida) / days
 
-    print('Mean real cost Breadth First Search:', '%.2f' % mean_bfs)
+    print('\nMean real cost Breadth First Search:', '%.2f' % mean_bfs)
     print('Mean real cost IDA*:', '%.2f' % mean_ida)
     
         
 
-
 if __name__ == "__main__":
     start_time = time.time()
     main()
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print("Total execution time: --- %.2f seconds ---" % (time.time() - start_time))
