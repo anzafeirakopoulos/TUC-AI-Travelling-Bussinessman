@@ -22,5 +22,3 @@ A bussinessman living in a big city has to travel everyday for the next 80 days 
 * The traffic that connects two nodes is an enumeration {heavy, normal, low}.
 * The traffic described in the graph is a prediction made by the businessman. The accuracy of his prediction is based on a probability. F.e a road has heavy traffic with p1 = 0.6 and has normal of low trafic with p2=p3=0.2.
 * After the passing of each day, the businessman can reconsider the accuracy of his probabilities.
-
-# Implementation
